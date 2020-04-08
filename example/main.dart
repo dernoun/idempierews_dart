@@ -27,7 +27,7 @@ abstract class TestWS {
 
   TestWS() {
     _login = new LoginRequest();
-    _login.setUser = 'SuperUser'; //superuser @ idempiere.com
+    _login.setUser = 'superuser @ idempiere.com';
     _login.setPass = 'Systemit';
     _login.setClientID = 11;
     _login.setRoleID = 102;
@@ -46,7 +46,7 @@ abstract class TestWS {
   LoginRequest get getLogin => _login;
 
   String getUrlBase() {
-    return 'http://207.180.240.63'; // https://test.idempiere.org
+    return 'https://test.idempiere.org';
   }
 
   WebServiceConnection get getClient => _client;
@@ -629,7 +629,7 @@ class TestQueryImage extends TestWS {
 main(List<String> args) async {
   print('Uncomment the function that you want to test on main.dart');
 
-  TestQueryData();
+  // TestQueryData();
 
   // TestCreateData();
 
