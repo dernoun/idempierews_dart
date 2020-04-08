@@ -7,8 +7,8 @@ You have to add Data on GardenWorld: [Packout.zip](https://github.com/ingeint/id
 
 - License: LGPL 3
 - Language: Dart
-- IDE: Eclipse
-- Venrion: v1.6.0
+- IDE: VSCode
+- Venrion: v0.0.2
 
 # Links
 - iDempiere Web Services: [https://wiki.idempiere.org/en/Web_services](https://wiki.idempiere.org/en/Web_services)
