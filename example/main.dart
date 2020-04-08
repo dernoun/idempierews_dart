@@ -28,7 +28,7 @@ abstract class TestWS {
   TestWS() {
     _login = new LoginRequest();
     _login.setUser = 'superuser @ idempiere.com';
-    _login.setPass = 'Systemit';
+    _login.setPass = 'System';
     _login.setClientID = 11;
     _login.setRoleID = 102;
     _login.setOrgID = 0;
