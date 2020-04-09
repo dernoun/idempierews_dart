@@ -13,3 +13,7 @@
 ## 0.0.4 - 2020-04-09
 
 - HTTPS Allow self signed certificates
+
+## 1.0.0 - 2020-04-09
+
+- Approve the package and format the code 
