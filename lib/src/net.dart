@@ -147,6 +147,9 @@ class WebServiceConnection {
       var httpClient = HttpClient();
       httpClient.connectionTimeout = Duration(milliseconds: getTimeout);
       httpClient.idleTimeout = Duration(milliseconds: getTimeout);
+      httpClient.badCertificateCallback =
+          ((X509Certificate cert, String host, int port) =>
+              true); // Allow self signed certificates
 
       await httpClient
           .openUrl(getRequestMethod, uri)
