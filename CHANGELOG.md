@@ -16,4 +16,8 @@
 
 ## 1.0.0 - 2020-04-09
 
-- Approve the package and format the code 
+- Approve the package and format the code
+
+## 1.0.1 - 2020-04-09
+
+- Fix some text description
