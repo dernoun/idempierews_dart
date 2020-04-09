@@ -9,3 +9,7 @@
 ## 0.0.3 - 2020-04-08
 
 - Add more info to README.md
+
+## 0.0.4 - 2020-04-09
+
+- HTTPS Allow self signed certificates
