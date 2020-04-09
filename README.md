@@ -74,51 +74,27 @@ main(List<String> args) async {
 ```
 - Output:
 ```XML
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <ns1:queryDataResponse xmlns:ns1="http://idempiere.org/ADInterface/1_0">
-      <WindowTabData xmlns="http://idempiere.org/ADInterface/1_0" NumRows="2" TotalRows="5" StartRow="3">
-        <DataSet>
-          <DataRow>
-            <field column="C_BPartner_ID">
-              <val>50008</val>
-            </field>
-            <field column="Value">
-              <val>Store South</val>
-            </field>
-            <field column="Name">
-              <val>Store South</val>
-            </field>
-            <field column="TaxID">
-              <val xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"></val>
-            </field>
-            <field column="Logo_ID">
-              <val xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"></val>
-            </field>
-          </DataRow>
-          <DataRow>
-            <field column="C_BPartner_ID">
-              <val>50009</val>
-            </field>
-            <field column="Value">
-              <val>Store West</val>
-            </field>
-            <field column="Name">
-              <val>Store West</val>
-            </field>
-            <field column="TaxID">
-              <val xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"></val>
-            </field>
-            <field column="Logo_ID">
-              <val xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"></val>
-            </field>
-          </DataRow>
-        </DataSet>
-        <RowCount>2</RowCount>
-        <Success>true</Success>
-      </WindowTabData>
-    </ns1:queryDataResponse>
-  </soap:Body>
-</soap:Envelope>
+Total rows: 5
+Num rows: 2
+Start row: 3
 
+Row: 1
+Column: C_BPartner_ID = 50008
+Column: Created = 2008-09-24 14:49:39
+Column: Value = Store South
+Column: Name = Store South
+Column: Logo_ID = 
+
+Row: 2
+Column: C_BPartner_ID = 50009
+Column: Created = 2008-09-24 14:50:35
+Column: Value = Store West
+Column: Name = Store West
+Column: Logo_ID = 
+
+--------------------------
+Web Service: QueryBPartnerTest
+Attempts: 1
+Time: 1019
+--------------------------
 ```
