@@ -1,6 +1,6 @@
 name: idempierews_dart
 description: Soap Client for iDempiere ERP, from dart code base you can send request and receive response from iDempiere/Adempiere/Compiere ERP
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/dernoun/idempierews_dart
 
 environment:
