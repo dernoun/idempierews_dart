@@ -21,3 +21,7 @@
 ## 1.0.1 - 2020-04-09
 
 - Fix some text description
+
+## 1.0.2 - 2020-05-07
+
+- Catch error tag on response
