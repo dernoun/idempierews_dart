@@ -168,7 +168,13 @@ class ResponseFactory {
     var xmlFault = response.findAllElements('faultstring');
     if (xmlFault.length > 0) {
       responseModel.setStatus = WebServiceResponseStatus.Error;
-      responseModel.setErrorMessage = xmlFault.elementAt(0).toString();
+      responseModel.setErrorMessage = xmlFault.elementAt(0).text;
+      return true;
+    }
+    xmlFault = response.findAllElements('Error');
+    if (xmlFault.length > 0) {
+      responseModel.setStatus = WebServiceResponseStatus.Error;
+      responseModel.setErrorMessage = xmlFault.elementAt(0).text;
       return true;
     }
     return false;
