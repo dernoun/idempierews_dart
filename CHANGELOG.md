@@ -25,3 +25,7 @@
 ## 1.0.2 - 2020-05-07
 
 - Catch error tag on response
+
+## 1.0.3 - 2020-05-25
+
+- Add multiple request attempts, replace hardcoded attempts time, set test role to WebServiceExecution

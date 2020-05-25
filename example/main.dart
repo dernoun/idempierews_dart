@@ -30,7 +30,7 @@ abstract class TestWS {
     _login.setUser = 'superuser @ idempiere.com';
     _login.setPass = 'System';
     _login.setClientID = 11;
-    _login.setRoleID = 102;
+    _login.setRoleID = 50004;
     _login.setOrgID = 0;
     _login.setStage = 2;
 
@@ -84,7 +84,7 @@ abstract class TestWS {
 
 class TestQueryData extends TestWS {
   @override
-  String getWebServiceType() => 'QueryBPartnerTest';
+  String getWebServiceType() => 'QueryBPartner';
 
   @override
   Future<void> testPerformed() async {
@@ -94,9 +94,9 @@ class TestQueryData extends TestWS {
     ws.setLimit = 2;
     ws.setOffset = 3;
 
-    DataRow data = DataRow();
-    data.addField('Name', '%Store%');
-    ws.setDataRow = data;
+    // DataRow data = DataRow();
+    // data.addField('Name', '%Store%');
+    // ws.setDataRow = data;
     WebServiceConnection client = getClient;
 
     try {
@@ -629,7 +629,7 @@ class TestQueryImage extends TestWS {
 main(List<String> args) async {
   print('Uncomment the function that you want to test on main.dart');
 
-  // TestQueryData();
+  TestQueryData();
 
   // TestCreateData();
 

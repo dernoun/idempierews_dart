@@ -142,47 +142,51 @@ class WebServiceConnection {
     _attemptsRequest = 0;
     bool successful = false;
     String dataResponse;
-    try {
-      Uri uri = Uri.parse(_getWebServiceUrl());
-      var httpClient = HttpClient();
-      httpClient.connectionTimeout = Duration(milliseconds: getTimeout);
-      httpClient.idleTimeout = Duration(milliseconds: getTimeout);
-      httpClient.badCertificateCallback =
-          ((X509Certificate cert, String host, int port) =>
-              true); // Allow self signed certificates
 
-      await httpClient
-          .openUrl(getRequestMethod, uri)
-          .then((HttpClientRequest request) async {
-        // request.headers.add(HttpHeaders.acceptEncodingHeader, 'gzip');
-        request.headers.contentType =
-            new ContentType('application', 'text/xml', charset: 'UTF-8');
-        _attemptsRequest++;
-        request.write(dataRequest);
+    while (!successful) {
+      _attemptsRequest++;
+      try {
+        Uri uri = Uri.parse(_getWebServiceUrl());
+        var httpClient = HttpClient();
+        httpClient.connectionTimeout = Duration(milliseconds: getTimeout);
+        httpClient.idleTimeout = Duration(milliseconds: getTimeout);
+        httpClient.badCertificateCallback =
+            ((X509Certificate cert, String host, int port) =>
+                true); // Allow self signed certificates
 
-        await request.close().then((HttpClientResponse response) async {
-          var data = await utf8.decoder.bind(response).toList();
-          dataResponse = data.join();
-          // print(response.statusCode);
-          // response.headers.contentType = new ContentType('application', 'text/xml', charset: 'UTF-8');
-          // response.transform(utf8.decoder).listen((contents) {
-          //   dataResponse = contents;
-          // print(dataResponse);
-          //   successful = true;
-          // });
-          successful = true;
-          httpClient.close();
+        await httpClient
+            .openUrl(getRequestMethod, uri)
+            .then((HttpClientRequest request) async {
+          // request.headers.add(HttpHeaders.acceptEncodingHeader, 'gzip');
+          request.headers.contentType =
+              new ContentType('application', 'text/xml', charset: 'UTF-8');
+          request.write(dataRequest);
+
+          await request.close().then((HttpClientResponse response) async {
+            var data = await utf8.decoder.bind(response).toList();
+            dataResponse = data.join();
+            // print(response.statusCode);
+            // response.headers.contentType = new ContentType('application', 'text/xml', charset: 'UTF-8');
+            // response.transform(utf8.decoder).listen((contents) {
+            //   dataResponse = contents;
+            // print(dataResponse);
+            //   successful = true;
+            // });
+            successful = true;
+            httpClient.close();
+          });
+          _timeRequest = startTime.elapsed.inMilliseconds;
         });
-        _timeRequest = startTime.elapsed.inMilliseconds;
-      });
-    } catch (e) {
-      if (_attemptsRequest >= getAttempts) {
-        _timeRequest = startTime.elapsed.inMilliseconds;
-        if (e is SocketException)
-          throw Exception('Timeout exception, operation has expired: $e');
-        throw Exception('Error sending request: $e');
-      } else {
-        sleep(const Duration(milliseconds: 500));
+      } catch (e) {
+        if (_attemptsRequest >= getAttempts) {
+          _timeRequest = startTime.elapsed.inMilliseconds;
+          if (e is SocketException)
+            throw Exception('Timeout exception, operation has expired: $e');
+          throw Exception('Error sending request: $e');
+        } else {
+          sleep(Duration(milliseconds: getAttemptsTimeout));
+          continue;
+        }
       }
     }
 
