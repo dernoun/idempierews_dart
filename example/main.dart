@@ -31,8 +31,9 @@ abstract class TestWS {
     _login.setPass = 'System';
     _login.setClientID = 11;
     _login.setRoleID = 50004;
-    _login.setOrgID = 0;
+    _login.setOrgID = 11;
     _login.setStage = 2;
+    _login.setWarehouseID = 103;
 
     _client = new WebServiceConnection();
     _client.setAttempts = 3;

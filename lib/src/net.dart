@@ -196,7 +196,8 @@ class WebServiceConnection {
         doc = parse(dataResponse);
         return doc;
       } else {
-        return null;
+        return parse(
+            '<Error>Standard Exception: Error Connecting to the server</Error>');
       }
     } catch (e) {
       throw Exception('Error converting response to Document: $e');

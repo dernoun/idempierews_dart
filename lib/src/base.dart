@@ -23,46 +23,46 @@ import 'dart:typed_data';
 import 'enums.dart';
 
 class LoginRequest {
-  String user;
-  String pass;
-  Language lang;
-  int clientID;
-  int roleID;
-  int orgID;
-  int warehouseID;
-  int stage;
+  String _user;
+  String _pass;
+  Language _lang;
+  int _clientID;
+  int _roleID;
+  int _orgID;
+  int _warehouseID;
+  int _stage;
 
-  String get getUser => user;
+  String get getUser => _user;
 
-  set setUser(String user) => this.user = user;
+  set setUser(String user) => this._user = user;
 
-  String get getPass => pass;
+  String get getPass => _pass;
 
-  set setPass(String pass) => this.pass = pass;
+  set setPass(String pass) => this._pass = pass;
 
-  Language get getLang => lang;
+  Language get getLang => _lang;
 
-  set setLang(Language lang) => this.lang = lang;
+  set setLang(Language lang) => this._lang = lang;
 
-  int get getClientID => clientID;
+  int get getClientID => _clientID;
 
-  set setClientID(int clientID) => this.clientID = clientID;
+  set setClientID(int clientID) => this._clientID = clientID;
 
-  int get getRoleID => roleID;
+  int get getRoleID => _roleID;
 
-  set setRoleID(int roleID) => this.roleID = roleID;
+  set setRoleID(int roleID) => this._roleID = roleID;
 
-  int get getOrgID => orgID;
+  int get getOrgID => _orgID;
 
-  set setOrgID(int orgID) => this.orgID = orgID;
+  set setOrgID(int orgID) => this._orgID = orgID;
 
-  int get getWarehouseID => warehouseID;
+  int get getWarehouseID => _warehouseID;
 
-  set setWarehouseID(int warehouseID) => this.warehouseID = warehouseID;
+  set setWarehouseID(int warehouseID) => this._warehouseID = warehouseID;
 
-  int get getStage => stage;
+  int get getStage => _stage;
 
-  set setStage(int stage) => this.stage = stage;
+  set setStage(int stage) => this._stage = stage;
 }
 
 class Field {
@@ -126,7 +126,7 @@ class Field {
   }
 
   int getIntValue() {
-    if (getValue == null) return null;
+    if (getValue == null) return 0;
 
     if (getValue is String) return int.parse(getValue.toString());
 
@@ -134,7 +134,7 @@ class Field {
   }
 
   double getDoubleValue() {
-    if (getValue == null) return null;
+    if (getValue == null) return 0.0;
 
     if (getValue is String) return double.parse(getValue.toString());
 
@@ -142,7 +142,7 @@ class Field {
   }
 
   bool getboolValue() {
-    if (getValue == null) return null;
+    if (getValue == null) return false;
 
     if (getValue is String) {
       String value = getValue.toString().toUpperCase();

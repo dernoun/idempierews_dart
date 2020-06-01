@@ -29,3 +29,7 @@
 ## 1.0.3 - 2020-05-25
 
 - Add multiple request attempts, replace hardcoded attempts time, set test role to WebServiceExecution
+
+## 1.0.4 - 2020-06-01
+
+- Null safety, add warehouse_id to login, encapsulate attributes
