@@ -126,7 +126,7 @@ class Field {
   }
 
   int getIntValue() {
-    if (getValue == null) return 0;
+    if (getValue == null || getValue == '') return 0;
 
     if (getValue is String) return int.parse(getValue.toString());
 
@@ -134,7 +134,7 @@ class Field {
   }
 
   double getDoubleValue() {
-    if (getValue == null) return 0.0;
+    if (getValue == null || getValue == '') return 0.0;
 
     if (getValue is String) return double.parse(getValue.toString());
 
@@ -142,7 +142,7 @@ class Field {
   }
 
   bool getboolValue() {
-    if (getValue == null) return false;
+    if (getValue == null || getValue == '') return false;
 
     if (getValue is String) {
       String value = getValue.toString().toUpperCase();
@@ -165,7 +165,7 @@ class Field {
   }
 
   DateTime getDateValue() {
-    if (getValue == null) return null;
+    if (getValue == null || getValue == '') return null;
     if (getValue is String) return DateTime.parse(getValue);
     return DateTime.now();
   }
