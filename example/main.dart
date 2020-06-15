@@ -19,6 +19,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:hex/hex.dart' show HEX;
 import 'package:idempierews_dart/idempierews_dart.dart';
 
 abstract class TestWS {
@@ -93,11 +94,11 @@ class TestQueryData extends TestWS {
     ws.setWebServiceType = getWebServiceType();
     ws.setLogin = getLogin;
     ws.setLimit = 2;
-    ws.setOffset = 3;
+    ws.setOffset = 0;
 
-    // DataRow data = DataRow();
-    // data.addField('Name', '%Store%');
-    // ws.setDataRow = data;
+    DataRow data = DataRow();
+    data.addField('C_BP_Group_ID', '104');
+    ws.setDataRow = data;
     WebServiceConnection client = getClient;
 
     try {
@@ -129,7 +130,7 @@ class TestQueryData extends TestWS {
 
 class TestCreateData extends TestWS {
   @override
-  String getWebServiceType() => 'CreateBPartnerTest';
+  String getWebServiceType() => 'CreateBPartner';
 
   @override
   Future<void> testPerformed() async {
@@ -138,6 +139,7 @@ class TestCreateData extends TestWS {
     createData.setWebServiceType = getWebServiceType();
 
     DataRow data = new DataRow();
+    data.addField('C_BP_Group_ID', '104');
     data.addField('Name', 'Test BPartner Dart');
     data.addField(
         'Value', 'Test_BPartner${DateTime.now().millisecondsSinceEpoch}');
@@ -168,14 +170,14 @@ class TestCreateData extends TestWS {
 
 class TestDeleteData extends TestWS {
   @override
-  String getWebServiceType() => 'DeleteBPartnerTest';
+  String getWebServiceType() => 'DeleteBPartner';
 
   @override
   Future<void> testPerformed() async {
     DeleteDataRequest deleteData = new DeleteDataRequest();
     deleteData.setLogin = getLogin;
     deleteData.setWebServiceType = getWebServiceType();
-    deleteData.setRecordID = 1000001;
+    deleteData.setRecordID = 1000000;
 
     WebServiceConnection client = getClient;
     try {
@@ -195,7 +197,7 @@ class TestDeleteData extends TestWS {
 
 class TestReadData extends TestWS {
   @override
-  String getWebServiceType() => 'ReadBPartnerTest';
+  String getWebServiceType() => 'ReadBPartner';
 
   @override
   Future<void> testPerformed() async {
@@ -233,17 +235,17 @@ class TestReadData extends TestWS {
 
 class TestUpdateData extends TestWS {
   @override
-  String getWebServiceType() => 'UpdateBPartnerTest';
+  String getWebServiceType() => 'UpdateBPartner';
 
   @override
   Future<void> testPerformed() async {
     UpdateDataRequest updateData = new UpdateDataRequest();
     updateData.setLogin = getLogin;
     updateData.setWebServiceType = getWebServiceType();
-    updateData.setRecordID = 1000010;
+    updateData.setRecordID = 118;
 
     DataRow data = new DataRow();
-    data.addField('Name', 'Test BPartner Dart');
+    data.addField('URL', 'https://test.idempiere.org');
     updateData.setDataRow = data;
 
     WebServiceConnection client = getClient;
@@ -270,7 +272,7 @@ class TestUpdateData extends TestWS {
 
 class TestCreateUpdateData extends TestWS {
   @override
-  String getWebServiceType() => 'CreateUpdateBPartnerTest';
+  String getWebServiceType() => 'CreateUpdateUser';
 
   @override
   Future<void> testPerformed() async {
@@ -279,9 +281,10 @@ class TestCreateUpdateData extends TestWS {
     createData.setWebServiceType = getWebServiceType();
 
     DataRow data = new DataRow();
-    data.addField('Name', 'Test BPartner Dart WS');
-    data.addField('Value', 'Test_BPartner_Dart');
-    data.addField('TaxID', '123456');
+    data.addField('Name', 'Joe Block');
+    data.addField('Phone', '555-879-89');
+    data.addField('C_BPartner_ID', '118');
+    data.addField('EMail', 'joeblock@gardenworld.com');
     createData.setDataRow = data;
 
     WebServiceConnection client = getClient;
@@ -308,14 +311,13 @@ class TestCreateUpdateData extends TestWS {
 
 class TestGetListData extends TestWS {
   @override
-  String getWebServiceType() => 'GetListTest';
+  String getWebServiceType() => 'GetListSalesRegions';
 
   @override
   Future<void> testPerformed() async {
     GetListRequest getListRequest = new GetListRequest();
     getListRequest.setWebServiceType = getWebServiceType();
     getListRequest.setLogin = getLogin;
-    getListRequest.setAdReferenceID = 350;
 
     WebServiceConnection client = getClient;
 
@@ -346,8 +348,18 @@ class TestGetListData extends TestWS {
 }
 
 class TestRunProcess extends TestWS {
+  Future<File> writeToFile(Uint8List data, String path) async {
+    try {
+      var file = File(path);
+      return await file.writeAsBytes(data);
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
   @override
-  String getWebServiceType() => 'RunProcessValidateBPartnerTest';
+  String getWebServiceType() => 'RunStorageDetail';
 
   @override
   Future<void> testPerformed() async {
@@ -356,7 +368,7 @@ class TestRunProcess extends TestWS {
     process.setLogin = getLogin;
 
     ParamValues params = new ParamValues();
-    params.addField('C_BPartner_ID', '50003');
+    params.addField('M_Product_ID', '128');
     process.setParamValues = params;
 
     WebServiceConnection client = getClient;
@@ -366,7 +378,11 @@ class TestRunProcess extends TestWS {
       if (response.getStatus == WebServiceResponseStatus.Error) {
         print(response.getErrorMessage);
       } else {
-        print(response.getSummary);
+        print(response.getReportFormat);
+        var list = HEX.decode(response.getSummary);
+        Uint8List bytes = Uint8List.fromList(list);
+        writeToFile(
+            bytes, '../../documents/ReadFileTest.${response.getReportFormat}');
       }
     } catch (e) {}
   }
@@ -374,14 +390,14 @@ class TestRunProcess extends TestWS {
 
 class TestDocAction extends TestWS {
   @override
-  String getWebServiceType() => 'DocActionInvoiceTest';
+  String getWebServiceType() => 'ActionCompleteOrder';
 
   @override
   Future<void> testPerformed() async {
     SetDocActionRequest action = new SetDocActionRequest();
     action.setDocAction = DocAction.Complete;
     action.setLogin = getLogin;
-    action.setRecordID = 1000000;
+    action.setRecordID = 1000000; // Change the recordId
     action.setWebServiceType = getWebServiceType();
 
     WebServiceConnection client = getClient;
@@ -402,40 +418,97 @@ class TestDocAction extends TestWS {
 
 class TestComposite extends TestWS {
   @override
-  String getWebServiceType() => 'CompositeMovementTest';
+  String getWebServiceType() => 'SyncOrder';
 
   @override
   Future<void> testPerformed() async {
+    // Define the composite
     CompositeOperationRequest compositeOperation = CompositeOperationRequest();
     compositeOperation.setLogin = getLogin;
-    compositeOperation.setWebServiceType = 'CompositeMovementTest';
-    CreateDataRequest createMovement = new CreateDataRequest();
-    createMovement.setWebServiceType = 'CreateMovementTest';
+    compositeOperation.setWebServiceType = getWebServiceType();
 
-    DataRow data = DataRow();
-    data.addField('C_DocType_ID', '143');
-    data.addField('MovementDate', '2020-04-03 17:08:00');
-    data.addField('AD_Org_ID', '11');
-    createMovement.setDataRow = data;
+    // Create BPartner
+    CreateDataRequest createBPartner = new CreateDataRequest();
+    createBPartner.setWebServiceType = 'CreateBPartner';
 
+    DataRow dataPartner = new DataRow();
+    dataPartner.addField('C_BP_Group_ID', '104');
+    dataPartner.addField('Name', 'iTBridge');
+    dataPartner.addField(
+        'Value', 'iTBridge${DateTime.now().millisecondsSinceEpoch}');
+    dataPartner.addField('TaxID', '123456');
+    createBPartner.setDataRow = dataPartner;
+
+    // Create User for BP
+    CreateUpdateDataRequest createUser = new CreateUpdateDataRequest();
+    createUser.setLogin = getLogin;
+    createUser.setWebServiceType = 'CreateUpdateUser';
+    DataRow dataUser = new DataRow();
+    dataUser.addField('Name', 'iTBridge');
+    dataUser.addField('Phone', '555-879-89');
+    dataUser.addField('EMail', 'joeblock@gardenworld.com');
+    dataUser.addField('C_BPartner_ID', '@C_BPartner.C_BPartner_ID');
+    createUser.setDataRow = dataUser;
+
+    // Create Location for user
+    CreateDataRequest createLocation = new CreateDataRequest();
+    createLocation.setWebServiceType = 'CreateUpdateLocation1';
+
+    DataRow dataLocation = new DataRow();
+    dataLocation.addField('Address1', '36 lot kadri Brahim iTBridge');
+    dataLocation.addField('C_Country_ID', '112');
+    dataLocation.addField('City', 'Constantine');
+    dataLocation.addField('Postal', '25004');
+    createLocation.setDataRow = dataLocation;
+
+    // Create BPartner Location from the location
+    CreateDataRequest createBPLocation = new CreateDataRequest();
+    createBPLocation.setWebServiceType = 'CreateUpdateBPLocation';
+
+    DataRow dataBPLocation = new DataRow();
+    dataBPLocation.addField('IsShipTo', 'Y');
+    dataBPLocation.addField('IsBillTo', 'Y');
+    dataBPLocation.addField('C_BPartner_ID', '@C_BPartner.C_BPartner_ID');
+    dataBPLocation.addField('C_Location_ID', '@C_Location.C_Location_ID');
+    createBPLocation.setDataRow = dataBPLocation;
+
+    // Create Sales Order Header
+    CreateDataRequest createOrder = new CreateDataRequest();
+    createOrder.setWebServiceType = 'createOrderRecord';
+    DataRow dataOrder = new DataRow();
+    dataOrder.addField('C_DocTypeTarget_ID', '135');
+    dataOrder.addField('C_BPartner_ID', '@C_BPartner.C_BPartner_ID');
+    dataOrder.addField('C_BPartner_Location_ID',
+        '@C_BPartner_Location.C_BPartner_Location_ID');
+    dataOrder.addField('Bill_BPartner_ID', '@C_BPartner.C_BPartner_ID');
+    dataOrder.addField(
+        'Bill_Location_ID', '@C_BPartner_Location.C_BPartner_Location_ID');
+    dataOrder.addField('AD_User_ID', '@AD_User.AD_User_ID');
+    dataOrder.addField('M_Warehouse_ID', '103');
+    createOrder.setDataRow = dataOrder;
+
+    // Create Sales Order Line
+    CreateDataRequest createOrderLine = new CreateDataRequest();
+    createOrderLine.setWebServiceType = 'CreateOrderLine';
+    DataRow dataLine = new DataRow();
+    dataLine.addField('C_Order_ID', '@C_Order.C_Order_ID');
+    dataLine.addField('M_Product_ID', '128');
+    dataLine.addField('QtyEntered', '10');
+    dataLine.addField('QtyOrdered', '10');
+    createOrderLine.setDataRow = dataLine;
+
+    // Complete the order
     SetDocActionRequest docAction = new SetDocActionRequest();
     docAction.setDocAction = DocAction.Complete;
-    docAction.setWebServiceType = 'DocActionMovementTest';
-    docAction.setRecordIDVariable = '@M_Movement.M_Movement_ID';
+    docAction.setWebServiceType = 'CompleteOrder';
+    docAction.setRecordIDVariable = '@C_Order.C_Order_ID';
 
-    CreateDataRequest createMovementLine = new CreateDataRequest();
-    createMovementLine.setWebServiceType = 'CreateMovementLineTest';
-    DataRow dataLine = new DataRow();
-    dataLine.addField('M_Movement_ID', '@M_Movement.M_Movement_ID');
-    dataLine.addField('M_Product_ID', '138');
-    dataLine.addField('MovementQty', '1');
-    dataLine.addField('M_Locator_ID', '50001');
-    dataLine.addField('M_LocatorTo_ID', '50000');
-    dataLine.addField('AD_Org_ID', '11');
-    createMovementLine.setDataRow = dataLine;
-
-    compositeOperation.addOperationInnerWS(createMovement);
-    compositeOperation.addOperationInnerWS(createMovementLine);
+    compositeOperation.addOperationInit(createBPartner, false, true);
+    compositeOperation.addOperationInnerWS(createUser);
+    compositeOperation.addOperationInnerWS(createLocation);
+    compositeOperation.addOperationInnerWS(createBPLocation);
+    compositeOperation.addOperationInnerWS(createOrder);
+    compositeOperation.addOperationInnerWS(createOrderLine);
     compositeOperation.addOperationInnerWS(docAction);
 
     WebServiceConnection client = getClient;
@@ -646,9 +719,11 @@ main(List<String> args) async {
 
   // TestRunProcess();
 
-  // TestDocAction();
+  TestDocAction();
 
   // TestComposite();
+
+  // to test this web service you have to pack in https://github.com/dernoun/idempiere-utils/blob/master/Image%20WS%202Pack.zip
 
   // TestCreateImage();
 

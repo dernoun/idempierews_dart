@@ -37,3 +37,11 @@
 ## 1.0.5 - 2020-06-01
 
 - Bug Fixes
+
+## 1.0.6 - 2020-06-15
+
+- Bug Fixes.
+- Change examples to connect to idempiere standard ws after IDEMPIERE-4272.
+- Add report format if the process return a file.
+- Add example of converting the Hex returned by the WS to file.
+- Create more complexe CompositeRequest.

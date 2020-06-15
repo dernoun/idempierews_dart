@@ -77,6 +77,7 @@ class CompositeResponse extends WebServiceResponse {
 class RunProcessResponse extends WebServiceResponse {
   String _logInfo;
   String _summary;
+  String _reportFormat;
 
   String get getLogInfo => _logInfo;
 
@@ -85,6 +86,10 @@ class RunProcessResponse extends WebServiceResponse {
   String get getSummary => _summary;
 
   set setSummary(String summary) => _summary = summary;
+
+  String get getReportFormat => _reportFormat;
+
+  set setReportFormat(String reportFormat) => _reportFormat = reportFormat;
 
   @override
   WebServiceResponseModel getWebServiceResponseModel() =>
@@ -242,7 +247,7 @@ class ResponseFactory {
       if (xmlProcess.length > 0) {
         if (xmlProcess.elementAt(0) != null &&
             xmlProcess.elementAt(0).attributes != null &&
-            xmlProcess.elementAt(0).getAttribute('ISReport') != null &&
+            xmlProcess.elementAt(0).getAttribute('IsReport') != null &&
             xmlProcess.elementAt(0).getAttribute('IsReport') == 'true')
           isReport = true;
         else if (xmlProcess.elementAt(0).getAttribute('IsError') == 'true') {
@@ -257,6 +262,10 @@ class ResponseFactory {
         if (isReport) {
           var xmlData = response.findAllElements('Data');
           responseModel.setSummary = xmlData.elementAt(0).text;
+          String reportFormat =
+              xmlProcess.elementAt(0).getAttribute('ReportFormat');
+          if (reportFormat.isNotEmpty)
+            responseModel.setReportFormat = reportFormat;
         } else {
           var xmlSummary = response.findAllElements('Summary');
           responseModel.setSummary = xmlSummary.elementAt(0).text;
