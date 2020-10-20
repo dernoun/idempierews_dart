@@ -1,3 +1,7 @@
+## 1.0.8 - 2020-10-20
+
+- upgrade packages
+
 ## 1.0.7 - 2020-08-12
 
 - upgrade and re-order CHANGLOG.md
