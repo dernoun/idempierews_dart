@@ -11,14 +11,14 @@ void main() {
           '<_0:operations/>');
     });
 
-    test('Test Create Element _0', () {
+    test('Test Create ElementChild _0', () {
       expect(
           RequestFactory.createXmlElementChild_0(
               'serviceType', [XmlText('CreateUpdateBPartner')]).toString(),
           '<_0:serviceType>CreateUpdateBPartner</_0:serviceType>');
     });
 
-    test('Test Creating the request ', () {
+    test('Test Creating the xml request ', () {
       LoginRequest _login = new LoginRequest();
       _login.setUser = 'superuser @ idempiere.com';
       _login.setPass = 'System';
