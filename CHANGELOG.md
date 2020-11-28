@@ -1,14 +1,18 @@
+## 1.1.0 - 2020-11-28
+
+- Correct conflict on example folder
+
 ## 1.0.9 - 2020-11-28
 
-- upgrade packages and fix the methods deprecated
+- Upgrade packages and fix the methods deprecated
 
 ## 1.0.8 - 2020-10-20
 
-- upgrade packages
+- Upgrade packages
 
 ## 1.0.7 - 2020-08-12
 
-- upgrade and re-order CHANGLOG.md
+- Upgrade and re-order CHANGLOG.md
 
 ## 1.0.6 - 2020-06-15
 
