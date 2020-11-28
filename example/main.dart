@@ -63,10 +63,9 @@ abstract class TestWS {
 
   void saveRequestResponse() {
     try {
+      getClient.writeRequest('../documents/${getWebServiceType()}_request.xml');
       getClient
-          .writeRequest('../../documents/${getWebServiceType()}_request.xml');
-      getClient
-          .writeResponse('../../documents/${getWebServiceType()}_response.xml');
+          .writeResponse('../documents/${getWebServiceType()}_response.xml');
     } catch (e) {
       print(e);
     }
@@ -719,7 +718,7 @@ main(List<String> args) async {
 
   // TestRunProcess();
 
-  TestDocAction();
+  // TestDocAction();
 
   // TestComposite();
 

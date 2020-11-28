@@ -193,10 +193,10 @@ class WebServiceConnection {
     try {
       if (successful) {
         XmlDocument doc;
-        doc = parse(dataResponse);
+        doc = XmlDocument.parse(dataResponse);
         return doc;
       } else {
-        return parse(
+        return XmlDocument.parse(
             '<Error>Standard Exception: Error Connecting to the server</Error>');
       }
     } catch (e) {

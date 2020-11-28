@@ -284,7 +284,7 @@ class RequestFactory {
               nest: _buildXmlRequest(webService));
         });
       }, namespaces: RequestFactory.nameSpaces);
-      var envelope = builder.build();
+      var envelope = builder.buildDocument();
       return envelope;
     } catch (e) {
       throw new Exception('Error building XML Envelope request : $e');
