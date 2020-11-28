@@ -1,14 +1,13 @@
 # idempierewsc_dart
 # Description
-iDempiere Dart WebService Client is a Soap Client for iDempiere ERP [http://www.idempiere.org](http://www.idempiere.org). It allows the programmer to abstract the generation of XML requests, making development easier. This implementation can be used in Dart and Flutter.
+iDempiere Dart WebService Client is a Soap Client for iDempiere ERP [https://www.idempiere.org](https://www.idempiere.org). It allows the programmer to abstract the generation of XML requests, making development easier. This implementation can be used in Dart and Flutter.
 
-You have to add Data on GardenWorld: [Packout.zip](https://github.com/ingeint/idempierewsc-python/blob/master/documents/Test%20WebServices%202Pack.zip). Examples are available in the exemple folder.
 # Features
 
 - License: LGPL 3
 - Language: Dart
 - IDE: VSCode
-- Version: v1.0.1
+- Version: v1.0.9
 
 # Links
 - iDempiere Web Services: [https://wiki.idempiere.org/en/Web_services](https://wiki.idempiere.org/en/Web_services)

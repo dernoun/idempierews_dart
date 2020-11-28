@@ -1,3 +1,7 @@
+## 1.0.9 - 2020-11-28
+
+- upgrade packages and fix the methods deprecated
+
 ## 1.0.8 - 2020-10-20
 
 - upgrade packages
