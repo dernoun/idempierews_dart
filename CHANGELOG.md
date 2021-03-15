@@ -1,3 +1,7 @@
+## 1.1.2 - 2021-03-15
+
+-  Upgrade packages
+
 ## 1.1.1 - 2021-03-15
 
 - Correct depricated list declaration
