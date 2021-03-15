@@ -347,11 +347,11 @@ abstract class FieldsContainer {
   List<Field> _fields;
 
   FieldsContainer() {
-    _fields = List<Field>();
+    _fields = List<Field>.empty(growable: true);
   }
 
   List<Field> get getFields {
-    List<Field> temp = new List<Field>();
+    List<Field> temp = new List<Field>.empty(growable: true);
     temp.addAll(_fields);
     return temp;
   }
@@ -475,11 +475,11 @@ class DataSet {
 
   // Default constructor
   DataSet() {
-    _rows = new List<DataRow>();
+    _rows = new List<DataRow>.empty(growable: true);
   }
   // Get all rows
   List<DataRow> getRows() {
-    List<DataRow> temp = new List<DataRow>();
+    List<DataRow> temp = new List<DataRow>.empty(growable: true);
     temp.addAll(_rows);
     return temp;
   }
@@ -563,7 +563,7 @@ class Operation {
 abstract class CompositeRequest extends WebServiceRequest {
   List<Operation> _operations;
   CompositeRequest() {
-    _operations = List<Operation>();
+    _operations = List<Operation>.empty(growable: true);
   }
 
   // @see org.idempiere.webservice.client.base.WebServiceRequest#getWebServiceRequestModel()
@@ -602,7 +602,7 @@ abstract class CompositeRequest extends WebServiceRequest {
 
   // Get all field
   List<Operation> getOperations() {
-    List<Operation> temp = List<Operation>();
+    List<Operation> temp = List<Operation>.empty(growable: true);
     temp.addAll(_operations);
     return temp;
   }

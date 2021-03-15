@@ -1,3 +1,7 @@
+## 1.1.1 - 2021-03-15
+
+- Correct depricated list declaration
+
 ## 1.1.0 - 2020-11-28
 
 - Correct conflict on example folder

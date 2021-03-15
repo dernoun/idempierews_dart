@@ -32,12 +32,13 @@ class CompositeResponse extends WebServiceResponse {
 
   // Default constructor
   CompositeResponse() {
-    _responses = List<WebServiceResponse>();
+    _responses = List<WebServiceResponse>.empty(growable: true);
   }
 
   // Gets the responses
   List<WebServiceResponse> getResponses() {
-    List<WebServiceResponse> temp = List<WebServiceResponse>();
+    List<WebServiceResponse> temp =
+        List<WebServiceResponse>.empty(growable: true);
     temp.addAll(_responses);
     return temp;
   }
