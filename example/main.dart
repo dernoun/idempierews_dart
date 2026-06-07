@@ -48,7 +48,7 @@ abstract class TestWS {
   LoginRequest get getLogin => _login;
 
   String getUrlBase() {
-    return 'https://test.idempiere.org';
+    return 'https://demo.globalqss.com';
   }
 
   WebServiceConnection get getClient => _client;
@@ -248,7 +248,7 @@ class TestUpdateData extends TestWS {
     updateData.setRecordID = 118;
 
     DataRow data = new DataRow();
-    data.addField('URL', 'https://test.idempiere.org');
+    data.addField('URL', 'https://demo.globalqss.com');
     updateData.setDataRow = data;
 
     WebServiceConnection client = getClient;

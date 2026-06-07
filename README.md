@@ -32,7 +32,7 @@ main(List<String> args) async {
   client.setAttempts = 3;
   client.setTimeout = 5000;
   client.setAttemptsTimeout = 5000;
-  client.setUrl = 'https://test.idempiere.org';
+  client.setUrl = 'https://demo.globalqss.com';
   client.setAppName = 'Dart Test WS Client';
 
   QueryDataRequest ws = new QueryDataRequest();
