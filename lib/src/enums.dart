@@ -162,7 +162,6 @@ extension DocActionExtension on DocAction {
       case DocAction.ReOpen:
         return 'OP';
     }
-    return '--';
   }
 
   String get value => _value(this);
@@ -248,7 +247,6 @@ extension DocStatusExtension on DocStatus {
       case DocStatus.WaitingConfirmation:
         return 'WC';
     }
-    return '??';
   }
 
   String get value => _value(this);

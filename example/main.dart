@@ -23,8 +23,8 @@ import 'package:hex/hex.dart' show HEX;
 import 'package:idempierews_dart/idempierews_dart.dart';
 
 abstract class TestWS {
-  LoginRequest _login;
-  WebServiceConnection _client;
+  late LoginRequest _login;
+  late WebServiceConnection _client;
 
   TestWS() {
     _login = new LoginRequest();
@@ -101,7 +101,8 @@ class TestQueryData extends TestWS {
     WebServiceConnection client = getClient;
 
     try {
-      WindowTabDataResponse response = await client.sendRequest(ws);
+      WindowTabDataResponse response =
+          await client.sendRequest(ws) as WindowTabDataResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error)
         print(response.getErrorMessage);
@@ -147,7 +148,8 @@ class TestCreateData extends TestWS {
 
     WebServiceConnection client = getClient;
     try {
-      StandardResponse response = await client.sendRequest(createData);
+      StandardResponse response =
+          await client.sendRequest(createData) as StandardResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error) {
         print(response.getErrorMessage);
@@ -180,7 +182,8 @@ class TestDeleteData extends TestWS {
 
     WebServiceConnection client = getClient;
     try {
-      StandardResponse response = await client.sendRequest(deleteData);
+      StandardResponse response =
+          await client.sendRequest(deleteData) as StandardResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error) {
         print(response.getErrorMessage);
@@ -207,7 +210,8 @@ class TestReadData extends TestWS {
 
     WebServiceConnection client = getClient;
     try {
-      WindowTabDataResponse response = await client.sendRequest(ws);
+      WindowTabDataResponse response =
+          await client.sendRequest(ws) as WindowTabDataResponse;
       if (response.getStatus == WebServiceResponseStatus.Error)
         print(response.getErrorMessage);
       else if (response.getStatus == WebServiceResponseStatus.Unsuccessful)
@@ -249,7 +253,8 @@ class TestUpdateData extends TestWS {
 
     WebServiceConnection client = getClient;
     try {
-      StandardResponse response = await client.sendRequest(updateData);
+      StandardResponse response =
+          await client.sendRequest(updateData) as StandardResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error) {
         print(response.getErrorMessage);
@@ -288,7 +293,8 @@ class TestCreateUpdateData extends TestWS {
 
     WebServiceConnection client = getClient;
     try {
-      StandardResponse response = await client.sendRequest(createData);
+      StandardResponse response =
+          await client.sendRequest(createData) as StandardResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error) {
         print(response.getErrorMessage);
@@ -321,7 +327,8 @@ class TestGetListData extends TestWS {
     WebServiceConnection client = getClient;
 
     try {
-      WindowTabDataResponse response = await client.sendRequest(getListRequest);
+      WindowTabDataResponse response =
+          await client.sendRequest(getListRequest) as WindowTabDataResponse;
       if (response.getStatus == WebServiceResponseStatus.Error)
         print(response.getErrorMessage);
       else if (response.getStatus == WebServiceResponseStatus.Unsuccessful)
@@ -347,7 +354,7 @@ class TestGetListData extends TestWS {
 }
 
 class TestRunProcess extends TestWS {
-  Future<File> writeToFile(Uint8List data, String path) async {
+  Future<File?> writeToFile(Uint8List data, String path) async {
     try {
       var file = File(path);
       return await file.writeAsBytes(data);
@@ -372,13 +379,14 @@ class TestRunProcess extends TestWS {
 
     WebServiceConnection client = getClient;
     try {
-      RunProcessResponse response = await client.sendRequest(process);
+      RunProcessResponse response =
+          await client.sendRequest(process) as RunProcessResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error) {
         print(response.getErrorMessage);
       } else {
         print(response.getReportFormat);
-        var list = HEX.decode(response.getSummary);
+        var list = HEX.decode(response.getSummary ?? '');
         Uint8List bytes = Uint8List.fromList(list);
         writeToFile(
             bytes, '../../documents/ReadFileTest.${response.getReportFormat}');
@@ -402,7 +410,8 @@ class TestDocAction extends TestWS {
     WebServiceConnection client = getClient;
 
     try {
-      StandardResponse response = await client.sendRequest(action);
+      StandardResponse response =
+          await client.sendRequest(action) as StandardResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error) {
         print(response.getErrorMessage);
@@ -513,7 +522,8 @@ class TestComposite extends TestWS {
     WebServiceConnection client = getClient;
 
     try {
-      CompositeResponse response = await client.sendRequest(compositeOperation);
+      CompositeResponse response =
+          await client.sendRequest(compositeOperation) as CompositeResponse;
       if (response.getStatus == WebServiceResponseStatus.Error)
         print(response.getErrorMessage);
       else {
@@ -537,7 +547,7 @@ class TestCreateImage extends TestWS {
   // from StackOverFlow
   Future<Uint8List> _readFileByte(String filePath) async {
     File imageFile = new File(filePath);
-    Uint8List bytes;
+    Uint8List bytes = Uint8List(0);
     await imageFile.readAsBytes().then((value) {
       bytes = Uint8List.fromList(value);
       print('reading of bytes is completed');
@@ -569,7 +579,8 @@ class TestCreateImage extends TestWS {
 
     WebServiceConnection client = getClient;
     try {
-      StandardResponse response = await client.sendRequest(createImage);
+      StandardResponse response =
+          await client.sendRequest(createImage) as StandardResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error) {
         print(response.getErrorMessage);
@@ -612,7 +623,8 @@ class TestReadImage extends TestWS {
     WebServiceConnection client = getClient;
 
     try {
-      WindowTabDataResponse response = await client.sendRequest(ws);
+      WindowTabDataResponse response =
+          await client.sendRequest(ws) as WindowTabDataResponse;
       if (response.getStatus == WebServiceResponseStatus.Error)
         print(response.getErrorMessage);
       else if (response.getStatus == WebServiceResponseStatus.Unsuccessful)
@@ -627,9 +639,9 @@ class TestReadImage extends TestWS {
               j++) {
             Field field = response.getDataSet.getRow(i).getFields.elementAt(j);
             print('Column: ${field.getColumn} = ${field.getValue}');
-            if (field.getColumn == 'BinaryData' && field.getColumn.isNotEmpty)
-              await writeToFile(
-                  field.getByteValue(), "../../documents/ReadImageTest.png");
+            final bytes = field.getByteValue();
+            if (field.getColumn == 'BinaryData' && bytes != null)
+              await writeToFile(bytes, "../../documents/ReadImageTest.png");
           }
           print('');
         }
@@ -662,7 +674,8 @@ class TestQueryImage extends TestWS {
     WebServiceConnection client = getClient;
 
     try {
-      WindowTabDataResponse response = await client.sendRequest(ws);
+      WindowTabDataResponse response =
+          await client.sendRequest(ws) as WindowTabDataResponse;
 
       if (response.getStatus == WebServiceResponseStatus.Error)
         print(response.getErrorMessage);
@@ -678,19 +691,14 @@ class TestQueryImage extends TestWS {
               j++) {
             Field field = response.getDataSet.getRow(i).getFields.elementAt(j);
             print('Column: ${field.getColumn} = ${field.getValue}');
-            print(response.getDataSet
-                .getRow(i)
-                .getField('AD_Image_ID')
-                .getValue
-                .toString());
-            print(response.getDataSet
-                .getRow(i)
-                .getField('AD_Image_ID')
-                .getValue
-                .toString());
-            if (field.getColumn == 'BinaryData' && field.getColumn.isNotEmpty)
-              await writeToFile(field.getByteValue(),
-                  "../../documents/QueryImageTest_${response.getDataSet.getRow(i).getField('AD_Image_ID').getValue.toString()}");
+            final imageId =
+                response.getDataSet.getRow(i).getField('AD_Image_ID');
+            print(imageId?.getValue.toString());
+            print(imageId?.getValue.toString());
+            final bytes = field.getByteValue();
+            if (field.getColumn == 'BinaryData' && bytes != null)
+              await writeToFile(bytes,
+                  "../../documents/QueryImageTest_${imageId?.getValue.toString()}");
           }
           print('');
         }

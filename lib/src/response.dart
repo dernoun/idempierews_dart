@@ -23,7 +23,8 @@ import 'package:xml/xml.dart';
 
 /// CompositeResponse. Response from CompositeInterface Web Service
 class CompositeResponse extends WebServiceResponse {
-  List<WebServiceResponse> _responses;
+  final List<WebServiceResponse> _responses =
+      List<WebServiceResponse>.empty(growable: true);
 
   // @see org.idempiere.webservice.client.base.WebServiceResponse#getWebServiceResponseModel()
   @override
@@ -31,9 +32,7 @@ class CompositeResponse extends WebServiceResponse {
       WebServiceResponseModel.CompositeResponse;
 
   // Default constructor
-  CompositeResponse() {
-    _responses = List<WebServiceResponse>.empty(growable: true);
-  }
+  CompositeResponse();
 
   // Gets the responses
   List<WebServiceResponse> getResponses() {
@@ -76,19 +75,19 @@ class CompositeResponse extends WebServiceResponse {
 
 /// RunProcessResponse. Response from RunProcess Web Service
 class RunProcessResponse extends WebServiceResponse {
-  String _logInfo;
-  String _summary;
-  String _reportFormat;
+  String? _logInfo;
+  String? _summary;
+  String? _reportFormat;
 
-  String get getLogInfo => _logInfo;
+  String? get getLogInfo => _logInfo;
 
   set setLogInfo(String logInfo) => _logInfo = logInfo;
 
-  String get getSummary => _summary;
+  String? get getSummary => _summary;
 
   set setSummary(String summary) => _summary = summary;
 
-  String get getReportFormat => _reportFormat;
+  String? get getReportFormat => _reportFormat;
 
   set setReportFormat(String reportFormat) => _reportFormat = reportFormat;
 
@@ -99,20 +98,18 @@ class RunProcessResponse extends WebServiceResponse {
 
 /// StandardResponse. Response from SetDocAction, CreateData, DeleteData, UpdateData Web Services
 class StandardResponse extends WebServiceResponse {
-  int _recordID;
-  DataRow _outputFields;
+  int? _recordID;
+  DataRow _outputFields = DataRow();
 
   // Response from SetDocAction, CreateData, DeleteData, UpdateData Web Services
-  StandardResponse() {
-    _outputFields = new DataRow();
-  }
+  StandardResponse();
 
   DataRow get getOutputFields => _outputFields;
 
   set setOutputFields(DataRow outputFields) =>
       this._outputFields = outputFields;
 
-  int get getRecordID => _recordID;
+  int? get getRecordID => _recordID;
 
   set setRecordID(int recordID) => this._recordID = recordID;
 
@@ -123,25 +120,23 @@ class StandardResponse extends WebServiceResponse {
 
 /// WindowTabDataResponse. Response from QueryData, GetList, ReadData Web Services
 class WindowTabDataResponse extends WebServiceResponse {
-  int _numRows;
-  int _totalRows;
-  int _startRow;
-  DataSet _dataSet;
+  int? _numRows;
+  int? _totalRows;
+  int? _startRow;
+  DataSet _dataSet = DataSet();
 
   // Response from QueryData, GetList, ReadData Web Services
-  WindowTabDataResponse() {
-    _dataSet = new DataSet();
-  }
+  WindowTabDataResponse();
 
-  int get getNumRows => _numRows;
+  int? get getNumRows => _numRows;
 
   set setNumRows(int numRows) => this._numRows = numRows;
 
-  int get getTotalRows => _totalRows;
+  int? get getTotalRows => _totalRows;
 
   set setTotalRows(int totalRows) => this._totalRows = totalRows;
 
-  int get getStartRow => _startRow;
+  int? get getStartRow => _startRow;
 
   set setStartRow(int startRow) => this._startRow = startRow;
 
@@ -166,7 +161,7 @@ class ResponseFactory {
       return createStandardResponse(response);
     else if (responseModel == WebServiceResponseModel.WindowTabDataResponse)
       return createWindowTabDataResponse(response);
-    return null;
+    throw ArgumentError('Unsupported response model: $responseModel');
   }
 
   static bool hasFaultError(
@@ -174,13 +169,13 @@ class ResponseFactory {
     var xmlFault = response.findAllElements('faultstring');
     if (xmlFault.length > 0) {
       responseModel.setStatus = WebServiceResponseStatus.Error;
-      responseModel.setErrorMessage = xmlFault.elementAt(0).text;
+      responseModel.setErrorMessage = xmlFault.elementAt(0).innerText;
       return true;
     }
     xmlFault = response.findAllElements('Error');
     if (xmlFault.length > 0) {
       responseModel.setStatus = WebServiceResponseStatus.Error;
-      responseModel.setErrorMessage = xmlFault.elementAt(0).text;
+      responseModel.setErrorMessage = xmlFault.elementAt(0).innerText;
       return true;
     }
     return false;
@@ -197,22 +192,19 @@ class ResponseFactory {
 
       var xmlResponses = response.findAllElements('StandardResponse');
       for (int i = 0; i < xmlResponses.length; i++) {
-        XmlElement xmlTemp = xmlResponses.elementAt(i);
-        xmlTemp.detachParent(null);
+        XmlElement xmlTemp = xmlResponses.elementAt(i).copy();
         WebServiceResponse partialResponse;
         if (xmlTemp.findElements('WindowTabData').length > 0) {
           XmlDocument xmlDocTemp = XmlDocument();
           XmlElement xmlEleTemp =
-              xmlTemp.findAllElements('WindowTabData').elementAt(0);
-          xmlEleTemp.detachParent(null);
+              xmlTemp.findAllElements('WindowTabData').elementAt(0).copy();
           xmlDocTemp.children.add(xmlEleTemp);
           partialResponse = createWindowTabDataResponse(xmlDocTemp);
           responseModel.addResponse(partialResponse);
         } else if (xmlTemp.findElements('RunProcessResponse').length > 0) {
           XmlDocument xmlDocTemp = XmlDocument();
           XmlElement xmlEleTemp =
-              xmlTemp.findAllElements('RunProcessResponse').elementAt(0);
-          xmlEleTemp.detachParent(null);
+              xmlTemp.findAllElements('RunProcessResponse').elementAt(0).copy();
           xmlDocTemp.children.add(xmlEleTemp);
           partialResponse = createRunProcessResponse(xmlDocTemp);
           responseModel.addResponse(partialResponse);
@@ -222,8 +214,7 @@ class ResponseFactory {
           partialResponse = createStandardResponse(xmlDocTemp);
           responseModel.addResponse(partialResponse);
         }
-        if (partialResponse != null &&
-            partialResponse.getStatus == WebServiceResponseStatus.Error) {
+        if (partialResponse.getStatus == WebServiceResponseStatus.Error) {
           responseModel.setStatus = WebServiceResponseStatus.Error;
           responseModel.setErrorMessage = partialResponse.getErrorMessage;
         }
@@ -246,15 +237,12 @@ class ResponseFactory {
       bool isReport = false;
 
       if (xmlProcess.length > 0) {
-        if (xmlProcess.elementAt(0) != null &&
-            xmlProcess.elementAt(0).attributes != null &&
-            xmlProcess.elementAt(0).getAttribute('IsReport') != null &&
-            xmlProcess.elementAt(0).getAttribute('IsReport') == 'true')
+        if (xmlProcess.elementAt(0).getAttribute('IsReport') == 'true')
           isReport = true;
         else if (xmlProcess.elementAt(0).getAttribute('IsError') == 'true') {
           responseModel.setStatus = WebServiceResponseStatus.Error;
           var xmlError = response.findAllElements('Error');
-          responseModel.setErrorMessage = xmlError.elementAt(0).text;
+          responseModel.setErrorMessage = xmlError.elementAt(0).innerText;
           return responseModel;
         }
 
@@ -262,17 +250,17 @@ class ResponseFactory {
 
         if (isReport) {
           var xmlData = response.findAllElements('Data');
-          responseModel.setSummary = xmlData.elementAt(0).text;
-          String reportFormat =
+          responseModel.setSummary = xmlData.elementAt(0).innerText;
+          String? reportFormat =
               xmlProcess.elementAt(0).getAttribute('ReportFormat');
-          if (reportFormat.isNotEmpty)
+          if (reportFormat != null && reportFormat.isNotEmpty)
             responseModel.setReportFormat = reportFormat;
         } else {
           var xmlSummary = response.findAllElements('Summary');
-          responseModel.setSummary = xmlSummary.elementAt(0).text;
+          responseModel.setSummary = xmlSummary.elementAt(0).innerText;
 
           var xmlLogInfo = response.findAllElements('LogInfo');
-          responseModel.setLogInfo = xmlLogInfo.elementAt(0).text;
+          responseModel.setLogInfo = xmlLogInfo.elementAt(0).innerText;
         }
       }
 
@@ -295,7 +283,7 @@ class ResponseFactory {
 
       if (xmlError.length > 0) {
         responseModel.setStatus = WebServiceResponseStatus.Error;
-        responseModel.setErrorMessage = xmlError.elementAt(0).text;
+        responseModel.setErrorMessage = xmlError.elementAt(0).innerText;
         return responseModel;
       }
 
@@ -303,10 +291,10 @@ class ResponseFactory {
 
       var xmlStandard = response.findAllElements('StandardResponse');
       if (xmlStandard.length > 0) {
-        String recordIDString =
+        String? recordIDString =
             xmlStandard.elementAt(0).getAttribute('RecordID');
 
-        if (recordIDString.isNotEmpty)
+        if (recordIDString != null && recordIDString.isNotEmpty)
           responseModel.setRecordID = int.parse(recordIDString);
       }
 
@@ -321,7 +309,7 @@ class ResponseFactory {
 
         XmlElement xmlDataField = xmlDataFields.elementAt(j);
         if (xmlDataField.getAttribute('column') != null)
-          field.setColumn = xmlDataField.getAttribute('column');
+          field.setColumn = xmlDataField.getAttribute('column')!;
         if (xmlDataField.getAttribute('value') != null)
           field.setValue = xmlDataField.getAttribute('value');
       }
@@ -344,13 +332,13 @@ class ResponseFactory {
 
       if (xmlError.length > 0) {
         responseModel.setStatus = WebServiceResponseStatus.Error;
-        responseModel.setErrorMessage = xmlError.elementAt(0).text;
+        responseModel.setErrorMessage = xmlError.elementAt(0).innerText;
         return responseModel;
       }
 
       var xmlSuccess = response.findAllElements('Success');
       if (xmlSuccess.length > 0) {
-        if (xmlSuccess.elementAt(0).text == 'false') {
+        if (xmlSuccess.elementAt(0).innerText == 'false') {
           responseModel.setStatus = WebServiceResponseStatus.Unsuccessful;
           return responseModel;
         }
@@ -361,17 +349,19 @@ class ResponseFactory {
       var xmlWindowTabData = response.findAllElements('WindowTabData');
 
       if (xmlWindowTabData.length > 0) {
-        String numRows = xmlWindowTabData.elementAt(0).getAttribute('NumRows');
-        if (numRows.isNotEmpty) responseModel.setNumRows = int.parse(numRows);
+        String? numRows = xmlWindowTabData.elementAt(0).getAttribute('NumRows');
+        if (numRows != null && numRows.isNotEmpty) {
+          responseModel.setNumRows = int.parse(numRows);
+        }
 
-        String totalRows =
+        String? totalRows =
             xmlWindowTabData.elementAt(0).getAttribute('TotalRows');
-        if (totalRows.isNotEmpty)
+        if (totalRows != null && totalRows.isNotEmpty)
           responseModel.setTotalRows = int.parse(totalRows);
 
-        String startRow =
+        String? startRow =
             xmlWindowTabData.elementAt(0).getAttribute('StartRow');
-        if (startRow.isNotEmpty)
+        if (startRow != null && startRow.isNotEmpty)
           responseModel.setStartRow = int.parse(startRow);
       }
 
@@ -393,12 +383,10 @@ class ResponseFactory {
           dataRow.addFieldfromField(field);
 
           XmlElement xmlDataField = xmlDataFields.elementAt(j);
-          field.setColumn = xmlDataField.getAttribute('column');
-          if (xmlDataField.findAllElements('val').elementAt(0).text == null)
-            field.setValue = '';
-          else
-            field.setValue =
-                xmlDataField.findAllElements('val').elementAt(0).text;
+          final column = xmlDataField.getAttribute('column');
+          if (column != null) field.setColumn = column;
+          final values = xmlDataField.findAllElements('val');
+          field.setValue = values.isEmpty ? '' : values.elementAt(0).innerText;
         }
       }
 

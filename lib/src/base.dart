@@ -23,87 +23,87 @@ import 'dart:typed_data';
 import 'enums.dart';
 
 class LoginRequest {
-  String _user;
-  String _pass;
-  Language _lang;
-  int _clientID;
-  int _roleID;
-  int _orgID;
-  int _warehouseID;
-  int _stage;
+  String? _user;
+  String? _pass;
+  Language? _lang;
+  int? _clientID;
+  int? _roleID;
+  int? _orgID;
+  int? _warehouseID;
+  int? _stage;
 
-  String get getUser => _user;
+  String? get getUser => _user;
 
   set setUser(String user) => this._user = user;
 
-  String get getPass => _pass;
+  String? get getPass => _pass;
 
   set setPass(String pass) => this._pass = pass;
 
-  Language get getLang => _lang;
+  Language? get getLang => _lang;
 
   set setLang(Language lang) => this._lang = lang;
 
-  int get getClientID => _clientID;
+  int? get getClientID => _clientID;
 
   set setClientID(int clientID) => this._clientID = clientID;
 
-  int get getRoleID => _roleID;
+  int? get getRoleID => _roleID;
 
   set setRoleID(int roleID) => this._roleID = roleID;
 
-  int get getOrgID => _orgID;
+  int? get getOrgID => _orgID;
 
   set setOrgID(int orgID) => this._orgID = orgID;
 
-  int get getWarehouseID => _warehouseID;
+  int? get getWarehouseID => _warehouseID;
 
   set setWarehouseID(int warehouseID) => this._warehouseID = warehouseID;
 
-  int get getStage => _stage;
+  int? get getStage => _stage;
 
   set setStage(int stage) => this._stage = stage;
 }
 
 class Field {
   dynamic _value;
-  String _column;
-  String _type;
-  String _lval;
-  bool _disp;
-  bool _edit;
-  bool _error;
-  String _errorVal;
+  String? _column;
+  String? _type;
+  String? _lval;
+  bool? _disp;
+  bool? _edit;
+  bool? _error;
+  String? _errorVal;
 
   dynamic get getValue => _value;
 
   set setValue(dynamic value) => this._value = value;
 
-  String get getColumn => _column;
+  String? get getColumn => _column;
 
   set setColumn(String column) => this._column = column;
 
-  String get getType => _type;
+  String? get getType => _type;
 
   set setType(String type) => this._type = type;
 
-  String get getLval => _lval;
+  String? get getLval => _lval;
 
   set setLval(String lval) => this._lval = lval;
 
-  bool get getDisp => _disp;
+  bool? get getDisp => _disp;
 
   set setDisp(bool disp) => this._disp = disp;
 
-  bool get getEdit => _edit;
+  bool? get getEdit => _edit;
 
   set setEdit(bool edit) => this._edit = edit;
 
-  bool get getError => _error;
+  bool? get getError => _error;
 
   set setError(bool error) => this._error = error;
 
-  String get getErrorVal => _errorVal;
+  String? get getErrorVal => _errorVal;
 
   set setErrorVal(String errorVal) => this._errorVal = errorVal;
 
@@ -121,7 +121,7 @@ class Field {
 
   Field.fromColumnValue(this._column, this._value);
 
-  String getStringValue() {
+  String? getStringValue() {
     return getValue == null ? null : getValue.toString();
   }
 
@@ -141,7 +141,7 @@ class Field {
     return double.parse(getValue);
   }
 
-  bool getboolValue() {
+  bool? getboolValue() {
     if (getValue == null || getValue == '') return false;
 
     if (getValue is String) {
@@ -154,7 +154,7 @@ class Field {
     return null;
   }
 
-  Uint8List getByteValue() {
+  Uint8List? getByteValue() {
     if (getValue == null) return null;
 
     if (getValue is String) {
@@ -164,13 +164,13 @@ class Field {
     return getValue;
   }
 
-  DateTime getDateValue() {
+  DateTime? getDateValue() {
     if (getValue == null || getValue == '') return null;
     if (getValue is String) return DateTime.parse(getValue);
     return DateTime.now();
   }
 
-  DocStatus getDocStatusValue() {
+  DocStatus? getDocStatusValue() {
     if (getValue == null) return null;
 
     if (getValue is String) {
@@ -184,7 +184,7 @@ class Field {
     return getValue.cast();
   }
 
-  DocAction getDocActionValue() {
+  DocAction? getDocActionValue() {
     if (getValue == null) return null;
 
     if (getValue is String) {
@@ -200,12 +200,10 @@ class Field {
 }
 
 abstract class WebServiceRequest {
-  LoginRequest _login;
-  String _webServiceType;
+  LoginRequest _login = LoginRequest();
+  String? _webServiceType;
 
-  WebServiceRequest() {
-    this._login = new LoginRequest();
-  }
+  WebServiceRequest();
 
   LoginRequest get getLogin => _login;
 
@@ -215,14 +213,14 @@ abstract class WebServiceRequest {
   ///
   /// @return The Web Service Type Name
 
-  String get getWebServiceType => _webServiceType;
+  String? get getWebServiceType => _webServiceType;
 
   /// Sets the Web Service Type Name. Table: WS_WebServiceType
   ///
   /// @param webServiceType
   ///            The Web Service Type Name to set
 
-  set setWebServiceType(String webServiceType) =>
+  set setWebServiceType(String? webServiceType) =>
       this._webServiceType = webServiceType;
 
   /// Web Service Method
@@ -251,9 +249,9 @@ abstract class WebServiceRequest {
 }
 
 abstract class WebServiceResponse {
-  WebServiceResponseStatus _status;
-  String _errorMessage;
-  String _webServiceType;
+  WebServiceResponseStatus? _status;
+  String? _errorMessage;
+  String? _webServiceType;
 
   /// Gets the web service response type
   ///
@@ -261,17 +259,18 @@ abstract class WebServiceResponse {
 
   WebServiceResponseModel getWebServiceResponseModel();
 
-  WebServiceResponseStatus get getStatus => _status;
+  WebServiceResponseStatus? get getStatus => _status;
 
   set setStatus(WebServiceResponseStatus status) => this._status = status;
 
-  String get getErrorMessage => _errorMessage;
+  String? get getErrorMessage => _errorMessage;
 
-  set setErrorMessage(String errorMessage) => this._errorMessage = errorMessage;
+  set setErrorMessage(String? errorMessage) =>
+      this._errorMessage = errorMessage;
 
-  String get getWebServiceType => _webServiceType;
+  String? get getWebServiceType => _webServiceType;
 
-  set setWebServiceType(String webServiceType) =>
+  set setWebServiceType(String? webServiceType) =>
       this._webServiceType = webServiceType;
 }
 
@@ -294,15 +293,15 @@ class ComponentInfo {
 }
 
 abstract class ModelGetListRequest extends WebServiceRequest {
-  int _adReferenceID;
-  String _filter;
+  int? _adReferenceID;
+  String? _filter;
 
-  int get getAdReferenceID => _adReferenceID;
+  int? get getAdReferenceID => _adReferenceID;
 
   set setAdReferenceID(int adReferenceID) =>
       this._adReferenceID = adReferenceID;
 
-  String get getFilter => _filter;
+  String? get getFilter => _filter;
 
   set setFilter(String filter) => this._filter = filter;
 
@@ -313,25 +312,25 @@ abstract class ModelGetListRequest extends WebServiceRequest {
 }
 
 abstract class ModelSetDocActionRequest extends WebServiceRequest {
-  String tableName;
-  int recordID;
-  String recordIDVariable;
-  DocAction docAction;
+  String? tableName;
+  int? recordID;
+  String? recordIDVariable;
+  DocAction? docAction;
 
-  String get getTableName => tableName;
+  String? get getTableName => tableName;
 
   set setTableName(String tableName) => this.tableName = tableName;
 
-  int get getRecordID => recordID;
+  int? get getRecordID => recordID;
 
   set setRecordID(int recordID) => this.recordID = recordID;
 
-  String get getRecordIDVariable => recordIDVariable;
+  String? get getRecordIDVariable => recordIDVariable;
 
   set setRecordIDVariable(String recordIDVariable) =>
       this.recordIDVariable = recordIDVariable;
 
-  DocAction get getDocAction => docAction;
+  DocAction? get getDocAction => docAction;
 
   set setDocAction(DocAction docAction) => this.docAction = docAction;
 
@@ -344,11 +343,9 @@ abstract class ModelSetDocActionRequest extends WebServiceRequest {
 //  WebServiceFieldsContainer For field collections
 
 abstract class FieldsContainer {
-  List<Field> _fields;
+  final List<Field> _fields = List<Field>.empty(growable: true);
 
-  FieldsContainer() {
-    _fields = List<Field>.empty(growable: true);
-  }
+  FieldsContainer();
 
   List<Field> get getFields {
     List<Field> temp = new List<Field>.empty(growable: true);
@@ -376,8 +373,8 @@ abstract class FieldsContainer {
     return _fields.removeAt(pos);
   }
 
-  Field removeFieldFromColumn(String columnName) {
-    Field returnField = getField(columnName);
+  Field? removeFieldFromColumn(String columnName) {
+    Field? returnField = getField(columnName);
     _fields.remove(returnField);
     return returnField;
   }
@@ -398,7 +395,12 @@ abstract class FieldsContainer {
   ///            New Field
 
   void addFieldfromField(Field field) {
-    Field findField = getField(field.getColumn);
+    final column = field.getColumn;
+    if (column == null) {
+      _fields.add(field);
+      return;
+    }
+    Field? findField = getField(column);
     if (findField != null) _fields.remove(findField);
     _fields.add(field);
   }
@@ -409,7 +411,7 @@ abstract class FieldsContainer {
   ///            Key for column name
   /// @return Field
 
-  Field getField(String columnName) {
+  Field? getField(String columnName) {
     for (int i = 0; i < _fields.length; i++) {
       if (_fields.elementAt(i).getColumn == columnName) {
         return _fields.elementAt(i);
@@ -471,12 +473,10 @@ class ParamValues extends FieldsContainer {
 
 /// DataSet, DataRow Container
 class DataSet {
-  List<DataRow> _rows;
+  final List<DataRow> _rows = List<DataRow>.empty(growable: true);
 
   // Default constructor
-  DataSet() {
-    _rows = new List<DataRow>.empty(growable: true);
-  }
+  DataSet();
   // Get all rows
   List<DataRow> getRows() {
     List<DataRow> temp = new List<DataRow>.empty(growable: true);
@@ -519,7 +519,7 @@ class DataSet {
 
 /// Operation For composite operation
 class Operation {
-  WebServiceRequest _webService;
+  late WebServiceRequest _webService;
   bool _preCommit;
   bool _postCommit;
 
@@ -537,8 +537,7 @@ class Operation {
   WebServiceRequest getWebService() => _webService;
 
   void setWebService(WebServiceRequest webService) {
-    if (webService != null) if (webService.getWebServiceMethod() ==
-            WebServiceMethod.getList ||
+    if (webService.getWebServiceMethod() == WebServiceMethod.getList ||
         webService.getWebServiceMethod() == WebServiceMethod.queryData ||
         webService.getWebServiceMethod() == WebServiceMethod.compositeOperation)
       throw Exception(
@@ -561,10 +560,8 @@ class Operation {
 }
 
 abstract class CompositeRequest extends WebServiceRequest {
-  List<Operation> _operations;
-  CompositeRequest() {
-    _operations = List<Operation>.empty(growable: true);
-  }
+  final List<Operation> _operations = List<Operation>.empty(growable: true);
+  CompositeRequest();
 
   // @see org.idempiere.webservice.client.base.WebServiceRequest#getWebServiceRequestModel()
   @override
@@ -624,34 +621,32 @@ abstract class CompositeRequest extends WebServiceRequest {
 }
 
 abstract class ModelRunProcessRequest extends WebServiceRequest {
-  ParamValues _paramValues;
-  DocAction _docAction;
-  int _recordID;
-  int _menuID;
-  int _processID;
+  ParamValues _paramValues = ParamValues();
+  DocAction? _docAction;
+  int? _recordID;
+  int? _menuID;
+  int? _processID;
 
   // Default constructor
-  ModelRunProcessRequest() {
-    _paramValues = new ParamValues();
-  }
+  ModelRunProcessRequest();
 
   ParamValues get getParamValues => _paramValues;
 
   set setParamValues(ParamValues paramValues) => _paramValues = paramValues;
 
-  DocAction get getDocAction => _docAction;
+  DocAction? get getDocAction => _docAction;
 
   set setDocAction(DocAction docAction) => _docAction = docAction;
 
-  int get getRecordID => _recordID;
+  int? get getRecordID => _recordID;
 
   set setRecordID(int recordID) => _recordID = recordID;
 
-  int get getMenuID => _menuID;
+  int? get getMenuID => _menuID;
 
   set setMenuID(int menuID) => _menuID = menuID;
 
-  int get getProcessID => _processID;
+  int? get getProcessID => _processID;
 
   set setProcessID(int processID) => _processID = processID;
 
@@ -663,51 +658,49 @@ abstract class ModelRunProcessRequest extends WebServiceRequest {
 }
 
 abstract class ModelCRUDRequest extends WebServiceRequest {
-  DataRow _dataRow;
-  int _offset;
-  int _limit;
-  String _filter;
-  ModelCRUDAction _action;
-  int _recordID;
-  String _recordIDVariable;
-  String _tableName;
+  DataRow _dataRow = DataRow();
+  int? _offset;
+  int? _limit;
+  String? _filter;
+  ModelCRUDAction? _action;
+  int? _recordID;
+  String? _recordIDVariable;
+  String? _tableName;
 
   // Default constructor
-  ModelCRUDRequest() {
-    _dataRow = new DataRow();
-  }
+  ModelCRUDRequest();
 
   DataRow get getDataRow => _dataRow;
 
   set setDataRow(DataRow dataRow) => _dataRow = dataRow;
 
-  int get getOffset => _offset;
+  int? get getOffset => _offset;
 
   set setOffset(int offset) => _offset = offset;
 
-  int get getLimit => _limit;
+  int? get getLimit => _limit;
 
   /// limit allow you to limit the response on the value that you set
   set setLimit(int limit) => _limit = limit;
 
-  String get getFilter => _filter;
+  String? get getFilter => _filter;
 
   set setFilter(String filter) => _filter = filter;
 
-  ModelCRUDAction get getAction => _action;
+  ModelCRUDAction? get getAction => _action;
 
   set setAction(ModelCRUDAction value) => _action = value;
 
-  int get getRecordID => _recordID;
+  int? get getRecordID => _recordID;
 
   set setRecordID(int recordID) => _recordID = recordID;
 
-  String get getRecordIDVariable => _recordIDVariable;
+  String? get getRecordIDVariable => _recordIDVariable;
 
   set setRecordIDVariable(String recordIDVariable) =>
       _recordIDVariable = recordIDVariable;
 
-  String get getTableName => _tableName;
+  String? get getTableName => _tableName;
 
   set setTableName(String tableName) => _tableName = tableName;
 

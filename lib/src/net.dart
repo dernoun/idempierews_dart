@@ -32,31 +32,30 @@ class WebServiceConnection {
   static const int DEFAULT_ATTEMPTS = 1;
   static const int DEFAULT_ATTEMPTS_TIMEOUT = 500;
 
-  String _appName;
-  String _url;
-  String _contentType;
-  String _requestMethod;
-  int _attempts;
-  int _timeout;
-  int _attemptsTimeout;
-  int _timeRequest;
-  int _attemptsRequest;
+  String _appName = '';
+  String _url = '';
+  String _contentType = DEFAULT_CONTENT_TYPE;
+  String _requestMethod = DEFAULT_REQUEST_METHOD;
+  int _attempts = DEFAULT_ATTEMPTS;
+  int _timeout = DEFAULT_TIMEOUT;
+  int _attemptsTimeout = DEFAULT_ATTEMPTS_TIMEOUT;
+  int _timeRequest = 0;
+  int _attemptsRequest = 0;
 
   // Proxy proxy;
-  XmlDocument _xmlRequest;
-  XmlDocument _xmlResponse;
-  WebServiceRequest _request;
+  XmlDocument? _xmlRequest;
+  XmlDocument? _xmlResponse;
+  WebServiceRequest? _request;
 
-  XmlDocument get getXmlRequest => _xmlRequest;
+  XmlDocument? get getXmlRequest => _xmlRequest;
 
-  XmlDocument get getXmlResponse => _xmlResponse;
+  XmlDocument? get getXmlResponse => _xmlResponse;
 
   String getUserAgent() {
     return ('${ComponentInfo.name} (${ComponentInfo.componentName}/${ComponentInfo.version}/Dart/${Platform.operatingSystem} ${Platform.operatingSystemVersion} ${Platform.version}) $getAppName');
   }
 
   String get getAppName {
-    if (_appName == null) return '';
     return _appName;
   }
 
@@ -85,37 +84,35 @@ class WebServiceConnection {
   set setTimeout(int timeout) => _timeout = timeout;
 
   String get getUrl {
-    if (_url == null) return '';
     return _url;
   }
 
   set setUrl(String url) => _url = url;
 
-  String _getPath() {
+  String? _getPath() {
     if (_request == null) return null;
-    return ('/ADInterface/services/${_request.getWebServiceDefinition().toString().split('.').last}');
+    return ('/ADInterface/services/${_request!.getWebServiceDefinition().toString().split('.').last}');
   }
 
   String _getWebServiceUrl() {
-    if (_getPath() == null) return getUrl;
+    final webServicePath = _getPath();
+    if (webServicePath == null) return getUrl;
 
     String url = getUrl;
     if (url.endsWith('/')) url = url.substring(0, url.length - 1);
 
-    String path = _getPath();
+    String path = webServicePath;
     if (path.startsWith('/')) path = path.substring(1);
-    return ('$_url/$path');
+    return ('$url/$path');
   }
 
   String get getContentType {
-    if (_contentType == null) return DEFAULT_CONTENT_TYPE;
     return _contentType;
   }
 
   set setContentType(String contentType) => _contentType = contentType;
 
   String get getRequestMethod {
-    if (_requestMethod == null) return DEFAULT_REQUEST_METHOD;
     return _requestMethod;
   }
 
@@ -125,23 +122,16 @@ class WebServiceConnection {
 
   int get getAttemptsRequest => _attemptsRequest;
 
-  WebServiceConnection() {
-    _requestMethod = DEFAULT_REQUEST_METHOD;
-    _attempts = DEFAULT_ATTEMPTS;
-    _attemptsTimeout = DEFAULT_ATTEMPTS_TIMEOUT;
-    _timeout = DEFAULT_TIMEOUT;
-    _contentType = DEFAULT_CONTENT_TYPE;
-    _url = '';
-  }
+  WebServiceConnection();
 
   Future<XmlDocument> sendStringRequest(String dataRequest) async {
-    if (getUrl == null || getUrl.isEmpty)
+    if (getUrl.isEmpty)
       throw Exception('URL must be different than empty or null');
 
     final startTime = Stopwatch()..start();
     _attemptsRequest = 0;
     bool successful = false;
-    String dataResponse;
+    String? dataResponse;
 
     while (!successful) {
       _attemptsRequest++;
@@ -193,7 +183,7 @@ class WebServiceConnection {
     try {
       if (successful) {
         XmlDocument doc;
-        doc = XmlDocument.parse(dataResponse);
+        doc = XmlDocument.parse(dataResponse ?? '');
         return doc;
       } else {
         return XmlDocument.parse(
@@ -258,14 +248,15 @@ class WebServiceConnection {
   }
 
   void writeRequest(String fileName) {
+    if (_xmlRequest == null) return;
     var requestFile = new File(fileName);
-    requestFile.writeAsString(_xmlRequest.toXmlString(pretty: true));
+    requestFile.writeAsString(_xmlRequest!.toXmlString(pretty: true));
   }
 
   void writeResponse(String fileName) {
     if (_xmlResponse != null) {
       var responseFile = new File(fileName);
-      responseFile.writeAsString(_xmlResponse.toXmlString(pretty: true));
+      responseFile.writeAsString(_xmlResponse!.toXmlString(pretty: true));
     }
   }
 }

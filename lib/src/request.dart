@@ -298,12 +298,11 @@ class RequestFactory {
       if (webService.getWebServiceRequestModel() ==
           WebServiceRequestModel.CompositeRequest) {
         xmlRequest.children.add(createXmlElementChild_0(
-            'serviceType', [XmlText(webService.getWebServiceType)]));
+            'serviceType', [XmlText(webService.getWebServiceType ?? '')]));
       }
       xmlRequest.children.add(_buildXmlModel(webService));
 
-      if (webService.getLogin != null)
-        xmlRequest.children.add(_buildXmlLogin(webService.getLogin));
+      xmlRequest.children.add(_buildXmlLogin(webService.getLogin));
 
       return xmlRequest;
     } catch (e) {
@@ -315,7 +314,7 @@ class RequestFactory {
     try {
       if (webService.getWebServiceRequestModel() ==
           WebServiceRequestModel.CompositeRequest) {
-        CompositeRequest request = webService;
+        CompositeRequest request = webService as CompositeRequest;
 
         XmlElement xmlModel = createXmlElement_0('operations');
 
@@ -329,14 +328,14 @@ class RequestFactory {
       /// ModelCRUDRequest
       else if (webService.getWebServiceRequestModel() ==
           WebServiceRequestModel.ModelCRUDRequest) {
-        ModelCRUDRequest request = webService;
+        ModelCRUDRequest request = webService as ModelCRUDRequest;
         XmlElement xmlModel = createXmlElementChild_0(
           'ModelCRUD',
           [
             XmlElement(
               XmlName('serviceType', RequestFactory.prefix_0),
               [],
-              [XmlText(webService.getWebServiceType)],
+              [XmlText(webService.getWebServiceType ?? '')],
             )
           ],
         );
@@ -344,7 +343,7 @@ class RequestFactory {
         if (request.getTableName != null) {
           xmlModel.children.add(createXmlElementChild_0(
             'TableName',
-            [XmlText(request.getTableName)],
+            [XmlText(request.getTableName!)],
           ));
         }
 
@@ -358,7 +357,7 @@ class RequestFactory {
         if (request.getRecordIDVariable != null) {
           xmlModel.children.add(createXmlElementChild_0(
             'recordIDVariable',
-            [XmlText(request.getRecordIDVariable)],
+            [XmlText(request.getRecordIDVariable!)],
           ));
         }
 
@@ -372,7 +371,7 @@ class RequestFactory {
         if (request.getFilter != null) {
           xmlModel.children.add(createXmlElementChild_0(
             'Filter',
-            [XmlText(request.getFilter)],
+            [XmlText(request.getFilter!)],
           ));
         }
 
@@ -390,8 +389,7 @@ class RequestFactory {
           ));
         }
 
-        if (request.getDataRow != null &&
-            request.getDataRow.getFieldsCount() > 0) {
+        if (request.getDataRow.getFieldsCount() > 0) {
           xmlModel.children.add(_buildXmlFieldsContainer(request.getDataRow));
         }
 
@@ -401,13 +399,13 @@ class RequestFactory {
       /// ModelGetListRequest
       else if (webService.getWebServiceRequestModel() ==
           WebServiceRequestModel.ModelGetListRequest) {
-        ModelGetListRequest request = webService;
+        ModelGetListRequest request = webService as ModelGetListRequest;
         XmlElement xmlModel = createXmlElementChild_0(
           'ModelGetList',
           [
             createXmlElementChild_0(
               'serviceType',
-              [XmlText(webService.getWebServiceType)],
+              [XmlText(webService.getWebServiceType ?? '')],
             )
           ],
         );
@@ -421,7 +419,7 @@ class RequestFactory {
         if (request.getFilter != null) {
           xmlModel.children.add(createXmlElementChild_0(
             'Filter',
-            [XmlText(request.getFilter)],
+            [XmlText(request.getFilter!)],
           ));
         }
         return xmlModel;
@@ -430,14 +428,14 @@ class RequestFactory {
       /// ModelRunProcessRequest
       else if (webService.getWebServiceRequestModel() ==
           WebServiceRequestModel.ModelRunProcessRequest) {
-        ModelRunProcessRequest request = webService;
+        ModelRunProcessRequest request = webService as ModelRunProcessRequest;
 
         XmlElement xmlModel = createXmlElementChild_0(
           'ModelRunProcess',
           [
             createXmlElementChild_0(
               'serviceType',
-              [XmlText(webService.getWebServiceType)],
+              [XmlText(webService.getWebServiceType ?? '')],
             )
           ],
         );
@@ -469,8 +467,7 @@ class RequestFactory {
             [XmlText(request.getDocAction.toString())],
           ));
         }
-        if (request.getParamValues != null &&
-            request.getParamValues.getFieldsCount() > 0) {
+        if (request.getParamValues.getFieldsCount() > 0) {
           xmlModel.children
               .add(_buildXmlFieldsContainer(request.getParamValues));
         }
@@ -480,14 +477,15 @@ class RequestFactory {
       /// ModelSetDocActionRequest
       else if (webService.getWebServiceRequestModel() ==
           WebServiceRequestModel.ModelSetDocActionRequest) {
-        ModelSetDocActionRequest request = webService;
+        ModelSetDocActionRequest request =
+            webService as ModelSetDocActionRequest;
 
         XmlElement xmlModel = createXmlElementChild_0(
           'ModelSetDocAction',
           [
             createXmlElementChild_0(
               'serviceType',
-              [XmlText(webService.getWebServiceType)],
+              [XmlText(webService.getWebServiceType ?? '')],
             )
           ],
         );
@@ -495,7 +493,7 @@ class RequestFactory {
         if (request.getTableName != null) {
           xmlModel.children.add(createXmlElementChild_0(
             'tableName',
-            [XmlText(request.getTableName)],
+            [XmlText(request.getTableName!)],
           ));
         }
 
@@ -509,14 +507,14 @@ class RequestFactory {
         if (request.getRecordIDVariable != null) {
           xmlModel.children.add(createXmlElementChild_0(
             'recordIDVariable',
-            [XmlText(request.getRecordIDVariable)],
+            [XmlText(request.getRecordIDVariable!)],
           ));
         }
 
         if (request.getDocAction != null) {
           xmlModel.children.add(createXmlElementChild_0(
             'docAction',
-            [XmlText(request.getDocAction.value)],
+            [XmlText(request.getDocAction!.value)],
           ));
         }
         return xmlModel;
@@ -581,13 +579,13 @@ class RequestFactory {
       XmlElement xmlField = createXmlElement_0('field');
       if (field.getColumn != null)
         xmlField.attributes
-            .add(XmlAttribute(XmlName('column'), field.getColumn));
+            .add(XmlAttribute(XmlName('column'), field.getColumn!));
 
       if (field.getType != null)
-        xmlField.attributes.add(XmlAttribute(XmlName('type'), field.getType));
+        xmlField.attributes.add(XmlAttribute(XmlName('type'), field.getType!));
 
       if (field.getLval != null)
-        xmlField.attributes.add(XmlAttribute(XmlName('lval'), field.getLval));
+        xmlField.attributes.add(XmlAttribute(XmlName('lval'), field.getLval!));
 
       if (field.getDisp != null)
         xmlField.attributes.add(XmlAttribute(
@@ -603,7 +601,7 @@ class RequestFactory {
 
       if (field.getErrorVal != null)
         xmlField.attributes
-            .add(XmlAttribute(XmlName('errorVal'), field.getErrorVal));
+            .add(XmlAttribute(XmlName('errorVal'), field.getErrorVal!));
 
       if (field.getValue != null) {
         var value;
@@ -642,14 +640,14 @@ class RequestFactory {
       if (login.getUser != null) {
         xmlLogin.children.add(createXmlElementChild_0(
           'user',
-          [XmlText(login.getUser)],
+          [XmlText(login.getUser!)],
         ));
       }
 
       if (login.getPass != null) {
         xmlLogin.children.add(createXmlElementChild_0(
           'pass',
-          [XmlText(login.getPass)],
+          [XmlText(login.getPass!)],
         ));
       }
 
