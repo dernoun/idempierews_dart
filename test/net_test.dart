@@ -1,7 +1,7 @@
 import 'package:idempierews_dart/src/base.dart';
+import 'package:idempierews_dart/src/net.dart';
 import 'package:idempierews_dart/src/request.dart';
 import 'package:test/test.dart';
-import 'package:idempierews_dart/src/net.dart';
 
 void main() {
   String dataRequest =
@@ -17,10 +17,10 @@ void main() {
     webServiceConnection.setAttemptsTimeout = 5000;
     webServiceConnection.setAppName = 'Java Test WS Client';
     webServiceConnection.setUrl =
-        'https://test.idempiere.org/ADInterface/services/ModelADService';
+        'https://demo.globalqss.com/ADInterface/services/ModelADService';
 
     LoginRequest _login = new LoginRequest();
-    _login.setUser = 'superuser @ idempiere.com';
+    _login.setUser = 'SuperUser';
     _login.setPass = 'System';
     _login.setClientID = 11;
     _login.setRoleID = 50004;
