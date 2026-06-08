@@ -7,7 +7,7 @@ iDempiere Dart WebService Client is a Soap Client for iDempiere ERP [https://www
 - License: LGPL 3
 - Language: Dart
 - IDE: VSCode
-- Version: v1.0.9
+- Version: v1.2.0
 
 # Links
 - iDempiere Web Services: [https://wiki.idempiere.org/en/Web_services](https://wiki.idempiere.org/en/Web_services)
